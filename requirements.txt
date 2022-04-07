@@ -1,3 +1,4 @@
 fastapi==0.63.0
+uvicorn
 fastapi-utils==0.2.1
-yaml
+PyYAML==6.0
