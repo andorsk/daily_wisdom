@@ -43,18 +43,21 @@ async def get_widsom_for_slack(key: str = "tao", request: Request = None):
     try:
         d = await get_wisdom(key)
         print("Got {}".format(d))
-	response = {
-            "blocks": [{ "type": "section", 
-                "text": {
-		    "type": "mrkdwn",
-		     "text": "*{}*".format(d.get("title", "Unknown Wisdom"))
+        response = {
+            "blocks": [
+                { "type": "section",
+                  "text": {
+                      "type": "mrkdwn",
+		              "text": "*{}*".format(d.get("title", "Unknown Wisdom"))
 	       	 }},
-		 {"type": "section",
-		  "text": {
-                       "type": "mrkdwn",
-			"text": d.get("content", "I seem to have forgotten my wisdom")
-		  }}]
-   	 }
+		     {
+             "type": "section",
+		     "text": {
+                 "type": "mrkdwn",
+			     "text": d.get("content", "I seem to have forgotten my wisdom")
+		     }}
+            ]
+   	}
         return response
     except Exception as e:
         raise e
