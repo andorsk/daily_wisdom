@@ -54,7 +54,7 @@ async def get_widsom_for_slack(key: str = "tao", request: Request = None):
              "type": "section",
 		     "text": {
                  "type": "mrkdwn",
-			     "text": d.get("content", "I seem to have forgotten my wisdom")
+			     "text": '```' + d.get("content", "I seem to have forgotten my wisdom") + '```'
 		     }}
             ]
    	}
