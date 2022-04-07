@@ -9,7 +9,8 @@
 import yaml
 import random
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
+from typing import Optional
 import json
 
 global data
@@ -28,10 +29,36 @@ def load_data(file):
             print(exc)
 
 @app.get("/{key}")
-def read_root(key: str):
+async def get_wisdom(key: str = "tao"):
+    print("Got key: {}".format(key))
     global data
-    i = random.randint(0, len(data)-1)
+    i = random.randint(0, len(data[key])-1)
+    if key not in data:
+        raise HTTPException(status_code=404, detail="Item not found")
     return data[key][i]
+
+@app.post("/slack/{key}")
+async def get_widsom_for_slack(key: str = "tao", request: Request = None):  
+    print("Got data {}".format(request))
+    try:
+        d = await get_wisdom(key)
+        print("Got {}".format(d))
+	response = {
+            "blocks": [{ "type": "section", 
+                "text": {
+		    "type": "mrkdwn",
+		     "text": "*{}*".format(d.get("title", "Unknown Wisdom"))
+	       	 }},
+		 {"type": "section",
+		  "text": {
+                       "type": "mrkdwn",
+			"text": d.get("content", "I seem to have forgotten my wisdom")
+		  }}]
+   	 }
+        return response
+    except Exception as e:
+        raise e
+
 
 try:
     file = os.environ.get("DATAFILE", "./files.json")
@@ -40,5 +67,8 @@ try:
     for f in fdata.items():
         load_data(f)
     print("Initialized")
+
 except Exception as e:
     exit(1)
+
+
