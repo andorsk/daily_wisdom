@@ -1,1 +1,3 @@
-# daily_wisdom
+# Daily Wisdom
+
+Get your daily wisdom here! 
