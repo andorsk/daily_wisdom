@@ -7,7 +7,6 @@
 # Date: 2022-04-07
 
 import yaml
-import argparse
 import random
 import os
 from fastapi import FastAPI
