@@ -10,34 +10,36 @@ import yaml
 import argparse
 import random
 import os
+from fastapi import FastAPI
+import json
 
 global data
-data = None
-
-from fastapi import FastAPI
+data = {}
 
 app = FastAPI()
 
 def load_data(file):
-    with open(file, "r") as stream:
+    print("Opening ", file[1])
+    with open(file[1], "r") as stream:
         try:
             global data
-            data = yaml.safe_load(stream)
+            data[file[0]] = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
             raise
             print(exc)
 
-@app.get("/tao")
-def read_root():
+@app.get("/{key}")
+def read_root(key: str):
     global data
     i = random.randint(0, len(data)-1)
-    return data[i]
-
+    return data[key][i]
 
 try:
-    print("Loading data file")
-    file = os.environ.get("DATAFILE", "tao.yml")
-    load_data(file)
-    print("Data is loaded")
+    file = os.environ.get("DATAFILE", "./files.json")
+    print("Opening", file)
+    fdata = json.load(open(file, "r"))
+    for f in fdata.items():
+        load_data(f)
+    print("Initialized")
 except Exception as e:
     exit(1)
