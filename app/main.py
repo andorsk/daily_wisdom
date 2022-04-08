@@ -32,6 +32,8 @@ def load_data(file):
 async def get_wisdom(key: str = "tao"):
     print("Got key: {}".format(key))
     global data
+    if key == 'favicon.ico':
+       raise HTTPException(status_code=500, detail="Failure")
     i = random.randint(0, len(data[key])-1)
     if key not in data:
         raise HTTPException(status_code=404, detail="Item not found")
