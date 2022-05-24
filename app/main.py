@@ -30,7 +30,7 @@ def load_data(file):
             print(exc)
 
 @app.get("/quote")
-async def get_quote(tags=""):
+async def get_quote(tags="famous-quotes"):
     params = {
         tags: tags
     }
