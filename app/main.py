@@ -9,6 +9,7 @@
 import yaml
 import random
 import os
+import requests
 from fastapi import FastAPI, HTTPException, Request
 from typing import Optional
 import json
@@ -28,9 +29,23 @@ def load_data(file):
             raise
             print(exc)
 
+@app.get("/quote")
+async def get_quote(tags=""):
+    params = {
+        tags: tags
+    }
+    resp = requests.get("https://api.quotable.io/random", params=params)
+    if resp.status_code == 200:
+        return resp.json()
+    raise ValueError("Got Response Code: {}".format(resp.status_code))
+
+
 @app.get("/{key}")
 async def get_wisdom(key: str = "tao"):
-    print("Got key: {}".format(key))
+    reserved = ["quote"]
+    if key in reserved:
+        raise ValueError("Routing error. Reserved")
+
     global data
     if key == 'favicon.ico':
        raise HTTPException(status_code=500, detail="Failure")
@@ -39,8 +54,32 @@ async def get_wisdom(key: str = "tao"):
         raise HTTPException(status_code=404, detail="Item not found")
     return data[key][i]
 
+@app.post("/slack/quote")
+async def get_slack_quote():
+    try:
+        d = await get_quote()
+        response = {
+	    "response_type": "in_channel",
+            "blocks": [
+                { "type": "section",
+                  "text": {
+                      "type": "mrkdwn",
+		              "text": "*{}*".format(d.get("author", "Unknown Author"))
+	       	 }},
+                {
+                  "type": "section",
+		            "text": {
+                  	    "type": "mrkdwn",
+			            "text": '```' + d.get("content", "I seem to have forgotten my wisdom") + '```'
+		        }}
+            ]
+   	}
+        return response
+    except Exception as e:
+        raise e
+
 @app.post("/slack/{key}")
-async def get_widsom_for_slack(key: str = "tao", request: Request = None):  
+async def get_wisdom_for_slack(key: str = "tao", request: Request = None):
     print("Got data {}".format(request))
     try:
         d = await get_wisdom(key)
