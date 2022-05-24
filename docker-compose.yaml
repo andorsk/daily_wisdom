@@ -3,5 +3,6 @@ services:
 
   daily_wisdom:
     build: .
+    restart: always
     ports:
       - "7781:80"
