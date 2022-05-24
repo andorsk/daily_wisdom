@@ -19,6 +19,25 @@ data = {}
 
 app = FastAPI()
 
+def build_slack_message(title, content):
+    msg = {
+	    "response_type": "in_channel",
+            "blocks": [
+                { "type": "section",
+                  "text": {
+                      "type": "mrkdwn",
+		              "text":  "*{}*".format(title)
+	       	 }},
+                {
+                  "type": "section",
+		            "text": {
+                  	    "type": "mrkdwn",
+			            "text": '```' + content + '```'
+		        }}
+            ]
+   	}
+    return msg
+
 def load_data(file):
     print("Opening ", file[1])
     with open(file[1], "r") as stream:
@@ -39,10 +58,27 @@ async def get_quote(tags="famous-quotes"):
         return resp.json()
     raise ValueError("Got Response Code: {}".format(resp.status_code))
 
+@app.get("/fact")
+async def get_fact():
+    api_key = os.environ.get("X_API_KEY")
+    headers = {
+        "X-API-KEY": api_key
+    }
+    params = {"limit": 1}
+    resp = requests.get(" https://api.api-ninjas.com/v1/facts", params=params, headers=headers)
+    return resp.json()[0]["fact"]
+
+@app.post("/slack/fact")
+async def get_slack_fact():
+    try:
+        d = await get_fact()
+        return build_slack_message("Random Fact", d)
+    except Exception as e:
+        raise e
 
 @app.get("/{key}")
 async def get_wisdom(key: str = "tao"):
-    reserved = ["quote"]
+    reserved = ["quote", "fact"]
     if key in reserved:
         raise ValueError("Routing error. Reserved")
 
