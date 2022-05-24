@@ -64,7 +64,7 @@ async def get_slack_quote():
                 { "type": "section",
                   "text": {
                       "type": "mrkdwn",
-		              "text": "*{}*".format(d.get("author", "Unknown Author"))
+		              "text": "*Random Quote: {}*".format(d.get("author", "Unknown Author"))
 	       	 }},
                 {
                   "type": "section",
