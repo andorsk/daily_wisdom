@@ -58,6 +58,23 @@ async def get_quote(tags="famous-quotes"):
         return resp.json()
     raise ValueError("Got Response Code: {}".format(resp.status_code))
 
+@app.get("/joke")
+async def get_joke():
+    global data
+    key = "joke"
+    i = random.randint(0, len(data[key])-1)
+    if key not in data:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return data[key][i]
+
+@app.post("/slack/joke")
+async def get_slack_joke():
+    try:
+        d = await get_joke()
+        return build_slack_message(d["setup"], d["punchline"])
+    except Exception as e:
+        raise e
+
 @app.get("/fact")
 async def get_fact():
     api_key = os.environ.get("X_API_KEY")
