@@ -55,7 +55,7 @@ But you can customize this to whatever you want. As a command:
 or many others.
 
 See https://api.slack.com/messaging/webhooks for documentation on how to use
-incomding web hooks.
+incoming web hooks.
 
 ## Architecture
 
