@@ -1,10 +1,11 @@
 # Daily Wisdom
 
-Get your daily wisdom here! I will improve the documentation on this README
-shortly. This was mostly for personal use so never bothered to improve the
-documentation on the README.
+Get your wisdom here! This was a short personal project I had to send myself
+messages such as sun tsu, the tao of programming, etc to my slack channel daily.
+I felt that these pieces of literature were best served like a cup of coffee,
+daily and gradually, rather than all at once.
 
-This uses fast api.
+![](https://i.imgur.com/MBuu5fE.png)
 
 Honestly, this repo is currently scoped mainly to just work ( and it does ) for
 my personal use. If this is interesting to others, I would be happy to build out
