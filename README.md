@@ -10,6 +10,9 @@ Honestly, this repo is currently scoped mainly to just work ( and it does ) for
 my personal use. If this is interesting to others, I would be happy to build out
 a more production version of this.
 
+**State:** Works, but made for personal use. You can extend this and generalize
+it, but not built for a larger audience.
+
 ## Usage:
 
 To start with python:
@@ -38,7 +41,7 @@ own books etc. It will be keyed based upon the `files.json` file.
 The content should be in yml format. See [sun tsu](app/sun_tsu.yml) for more
 details.
 
-## Ways to integrat this into slack
+## Ways to integrate this into slack
 
 I have daily messages sent to slack via a scheduler.
 
