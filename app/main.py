@@ -4,6 +4,7 @@ import yaml
 import random
 import os
 import requests
+import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from typing import Optional
 import json
@@ -152,15 +153,17 @@ async def get_wisdom_for_slack(key: str = "tao", request: Request = None):
         raise e
 
 
-try:
-    file = os.environ.get("DATAFILE", "./files.json")
-    print("Opening", file)
-    fdata = json.load(open(file, "r"))
-    for f in fdata.items():
-        load_data(f)
-    print("Initialized")
+def init():
+    try:
+        file = os.environ.get("DATAFILE", "./files.json")
+        print("Opening", file)
+        fdata = json.load(open(file, "r"))
+        for f in fdata.items():
+            load_data(f)
+        print("Initialized")
+    except Exception as e:
+        exit(1)
 
-except Exception as e:
-    exit(1)
-
-
+if __name__ == "__main__":
+    init()
+    uvicorn.run("main:app", port=5000, log_level="info")
