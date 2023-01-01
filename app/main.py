@@ -1,10 +1,4 @@
 # !/usr/bin/env python3
-# Copyright (C) Benri.io - All Rights Reserved
-# Unauthorized copying of this file, via any medium is strictly prohibited
-# Proprietary and confidential
-# Maintainer: andor
-# Contact: andor@benri.io
-# Date: 2022-04-07
 
 import yaml
 import random
