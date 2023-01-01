@@ -3,5 +3,8 @@ services:
 
   daily_wisdom:
     build: .
+    env_file:
+      - .env
+    restart: always
     ports:
       - "7781:80"
