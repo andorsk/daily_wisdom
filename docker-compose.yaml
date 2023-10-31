@@ -7,4 +7,4 @@ services:
       - .env
     restart: always
     ports:
-      - "7781:80"
+      - "7781:5000"
